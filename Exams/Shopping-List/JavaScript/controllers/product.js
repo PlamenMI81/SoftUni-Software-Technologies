@@ -28,6 +28,9 @@ module.exports = {
 
         Product.findById(id).then(product => {
             res.render('product/edit', product)
+        }).catch(err => {
+            res.redirect('/');
+            return;
         });
     },
     editPost: (req, res) => {
@@ -41,8 +44,11 @@ module.exports = {
             return;
         }
 
-        Product.findByIdAndUpdate(id,product).then(product => {
+        Product.findByIdAndUpdate(id, product).then(product => {
             res.redirect('/');
-        })
+        }).catch(err => {
+            res.redirect('/');
+            return;
+        });
     }
 };

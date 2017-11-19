@@ -19,29 +19,23 @@ module.exports = {
 
         Task.create(taskArgs).then(task => {
             res.redirect('/');
-        })
-
+        });
     },
     deleteGet: (req, res) => {
         let id = req.params.id;
         Task.findById(id).then(task => {
-            if (!task) {
-                res.redirect('/');
-                return;
-            }
             res.render('task/delete', task)
+        }).catch(err => {
+            res.redirect('/');
         });
     },
     deletePost: (req, res) => {
         let id = req.params.id;
 
-        if (!id) {
-            res.redirect('/');
-            return;
-        }
-
         Task.findByIdAndRemove(id).then(task => {
             res.redirect('/');
-        })
+        }).catch(err => {
+            res.redirect('/');
+        });
     }
 };

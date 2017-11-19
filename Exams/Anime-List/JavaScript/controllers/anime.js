@@ -28,6 +28,8 @@ module.exports = {
 
         Anime.findById(id).then(anime => {
             res.render('anime/delete', anime)
+        }).catch(err => {
+            res.redirect('/');
         });
     },
     deletePost: (req, res) => {
@@ -35,6 +37,9 @@ module.exports = {
 
         Anime.findByIdAndRemove(id).then(anime => {
             res.redirect('/');
+        }).catch(err => {
+            res.redirect('/');
+            return;
         });
     }
 };

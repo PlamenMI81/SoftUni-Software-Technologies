@@ -30,6 +30,8 @@ module.exports = {
 
         Task.findById(id).then(task => {
             res.render('task/edit', task)
+        }).catch(err => {
+            res.redirect('/');
         });
     },
     editPost: (req, res) => {
@@ -43,6 +45,8 @@ module.exports = {
 
         Task.findByIdAndUpdate(id, task).then(task => [
             res.redirect('/')
-        ]);
+        ]).catch(err => {
+            res.redirect('/');
+        });
     }
 };

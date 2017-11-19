@@ -29,6 +29,8 @@ module.exports = {
 
         Film.findById(id).then(film => {
             res.render('film/edit', film)
+        }).catch(err => {
+            res.redirect('/');
         });
     },
     editPost: (req, res) => {
@@ -45,13 +47,15 @@ module.exports = {
 
         Film.findByIdAndUpdate(id, film).then(film => {
             res.redirect('/');
-        })
+        });
     },
     deleteGet: (req, res) => {
         let id = req.params.id;
 
         Film.findById(id).then(film => {
             res.render('film/delete', film)
+        }).catch(err => {
+            res.redirect('/');
         });
     },
     deletePost: (req, res) => {
@@ -59,6 +63,8 @@ module.exports = {
 
         Film.findByIdAndRemove(id).then(film => {
             res.redirect('/')
+        }).catch(err => {
+            res.redirect('/');
         });
     }
 };
