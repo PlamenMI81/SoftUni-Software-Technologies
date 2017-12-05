@@ -41,7 +41,7 @@ public class ArticleController {
             return "redirect:/article/create";
         }
 
-        Article article = new Article(articleBindingModel.getTitle(), articleBindingModel.getTitle(), userEntity);
+        Article article = new Article(articleBindingModel.getTitle(), articleBindingModel.getContent(), userEntity);
         this.articleRepository.saveAndFlush(article);
 
         return "redirect:/";

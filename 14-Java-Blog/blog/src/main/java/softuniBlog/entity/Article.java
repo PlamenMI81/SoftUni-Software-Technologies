@@ -41,7 +41,7 @@ public class Article {
         this.title = title;
     }
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "text", nullable = false)
     public String getContent() {
         return content;
     }
