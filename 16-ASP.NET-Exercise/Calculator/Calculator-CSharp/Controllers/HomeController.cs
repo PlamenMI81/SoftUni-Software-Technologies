@@ -8,7 +8,7 @@ namespace Calculator_CSharp.Controllers
     {
         public ActionResult Index(Calculator calculator)
         {
-            return View();
+            return View(calculator);
         }
 
         [HttpPost]

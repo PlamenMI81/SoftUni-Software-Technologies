@@ -9,5 +9,10 @@
         public string Operator { get; set; }
 
         public decimal Result { get; set; }
+
+        public Calculator()
+        {
+            Result = 0;
+        }
     }
 }
