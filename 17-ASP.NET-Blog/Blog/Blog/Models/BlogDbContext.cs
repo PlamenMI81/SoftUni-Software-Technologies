@@ -10,7 +10,7 @@ namespace Blog.Models
         {
         }
 
-        public virtual DbSet<Article> Articles { get; set; }
+        public virtual IDbSet<Article> Articles { get; set; }
 
         public static BlogDbContext Create()
         {
