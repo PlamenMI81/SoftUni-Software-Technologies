@@ -57,6 +57,11 @@ namespace Blog.Controllers
         [HttpGet]
         public ActionResult Details(int? id)
         {
+            if (id == null)
+            {
+                return RedirectToAction("List");
+            }
+
             using (var db = new BlogDbContext())
             {
                 var article = db.Articles.Include(a => a.Author)
@@ -75,6 +80,11 @@ namespace Blog.Controllers
         [Authorize]
         public ActionResult Edit(int? id)
         {
+            if (id == null)
+            {
+                return RedirectToAction("List");
+            }
+
             using (var db = new BlogDbContext())
             {
                 var article = db.Articles.Find(id);
@@ -103,6 +113,11 @@ namespace Blog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int? id, ArticleViewModel articleViewModel)
         {
+            if (id == null)
+            {
+                return RedirectToAction("List");
+            }
+
             using (var db = new BlogDbContext())
             {
                 var article = db.Articles.Find(id);
@@ -136,6 +151,11 @@ namespace Blog.Controllers
         [Authorize]
         public ActionResult Delete(int? id)
         {
+            if (id == null)
+            {
+                return RedirectToAction("List");
+            }
+
             using (var db = new BlogDbContext())
             {
                 var article = db.Articles.Find(id);
@@ -160,6 +180,11 @@ namespace Blog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ConfrimDelete(int? id)
         {
+            if (id == null)
+            {
+                return RedirectToAction("List");
+            }
+
             using (var db = new BlogDbContext())
             {
                 var article = db.Articles.Find(id);
