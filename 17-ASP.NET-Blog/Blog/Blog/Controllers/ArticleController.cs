@@ -1,11 +1,11 @@
-﻿using System.Data.Entity;
-using System.Linq;
-using System.Web.Mvc;
-using Blog.Models;
-using Microsoft.AspNet.Identity;
-
-namespace Blog.Controllers
+﻿namespace Blog.Controllers
 {
+    using System.Data.Entity;
+    using System.Linq;
+    using System.Web.Mvc;
+    using Models;
+    using Microsoft.AspNet.Identity;
+
     public class ArticleController : Controller
     {
         public ActionResult Index()
@@ -37,21 +37,18 @@ namespace Blog.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Article article)
         {
-            using (var db = new BlogDbContext())
-            {
-                if (string.IsNullOrWhiteSpace(article.Title)
-                    || string.IsNullOrWhiteSpace(article.Content))
-                {
-                    return Redirect("create");
-                }
+            var db = new BlogDbContext();
 
+            if (ModelState.IsValid)
+            {
                 article.AuthorId = User.Identity.GetUserId();
 
                 db.Articles.Add(article);
                 db.SaveChanges();
 
-                return RedirectToAction("List");
+                return RedirectToAction("Details", new { id = article.Id });
             }
+            return RedirectToAction("Create");
         }
 
         [HttpGet]
@@ -118,33 +115,30 @@ namespace Blog.Controllers
                 return RedirectToAction("List");
             }
 
-            using (var db = new BlogDbContext())
+            var db = new BlogDbContext();
+            var article = db.Articles.Find(id);
+
+            if (article == null)
             {
-                var article = db.Articles.Find(id);
+                return RedirectToAction("List");
+            }
 
-                if (article == null)
-                {
-                    return RedirectToAction("List");
-                }
+            if (!IsUserAuthorize(article))
+            {
+                return RedirectToAction("List");
+            }
 
-                if (!IsUserAuthorize(article))
-                {
-                    return RedirectToAction("List");
-                }
-
-                if (string.IsNullOrWhiteSpace(articleViewModel.Title)
-                    || string.IsNullOrWhiteSpace(article.Content))
-                {
-                    return RedirectToAction("List");
-                }
-
+            if (ModelState.IsValid)
+            {
                 article.Title = articleViewModel.Title;
                 article.Content = articleViewModel.Content;
 
                 db.SaveChanges();
 
-                return RedirectToAction("List");
+                return RedirectToAction("Details", new { id = article.Id });
             }
+
+            return RedirectToAction("Edit", new {id = article.Id});
         }
 
         [HttpGet]
