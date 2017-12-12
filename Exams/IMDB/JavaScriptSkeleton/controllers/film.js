@@ -14,7 +14,7 @@ module.exports = {
         Film.create(film).then(film => {
             res.redirect("/");
         }).catch(err => {
-            film.error = 'Cannot create film.';
+            film.error = 'Cannot create the film.';
             res.render('film/create', film);
         });
     },
@@ -37,16 +37,16 @@ module.exports = {
         }).catch(err => {
             film.id = filmId;
             film.error = "Cannot edit the film.";
-            return res.render('film/edit', film);
-        })
+            res.render('film/edit', film);
+        });
     },
     deleteGet: (req, res) => {
         let filmId = req.params.id;
         Film.findById(filmId).then(film => {
             if (film) {
-                return res.render('film/delete', film);
+                res.render('film/delete', film);
             } else {
-                return res.redirect('/');
+                res.redirect('/');
             }
         }).catch(err => res.redirect('/'));
     },
