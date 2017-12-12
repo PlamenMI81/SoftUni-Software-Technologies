@@ -3,68 +3,57 @@ const Film = require('../models/Film');
 module.exports = {
     index: (req, res) => {
         Film.find().then(films => {
-            res.render('film/index', {'films': films})
-        });
+            res.render('film/index', {'films': films});
+        })
     },
     createGet: (req, res) => {
         res.render('film/create');
     },
     createPost: (req, res) => {
-        let filmArgs = req.body;
-
-        if (!filmArgs.name
-            || !filmArgs.genre
-            || !filmArgs.director
-            || !filmArgs.year) {
-            res.render('film/create');
-            return;
-        }
-
-        Film.create(filmArgs).then(film => {
-            res.redirect('/');
-        })
+        let film = req.body;
+        Film.create(film).then(film => {
+            res.redirect("/");
+        }).catch(err => {
+            film.error = 'Cannot create film.';
+            res.render('film/create', film);
+        });
     },
     editGet: (req, res) => {
-        let id = req.params.id;
-
-        Film.findById(id).then(film => {
-            res.render('film/edit', film)
-        }).catch(err => {
-            res.redirect('/');
-        });
+        let filmId = req.params.id;
+        Film.findById(filmId).then(film => {
+            if (film) {
+                res.render('film/edit', film);
+            } else {
+                res.redirect('/');
+            }
+        }).catch(err => res.redirect('/'));
     },
     editPost: (req, res) => {
-        let id = req.params.id;
+        let filmId = req.params.id;
         let film = req.body;
 
-        if (!film.name
-            || !film.genre
-            || !film.director
-            || !film.year) {
+        Film.findByIdAndUpdate(filmId, film, {runValidators: true}).then(films => {
             res.redirect('/');
-            return;
-        }
-
-        Film.findByIdAndUpdate(id, film).then(film => {
-            res.redirect('/');
-        });
+        }).catch(err => {
+            film.id = filmId;
+            film.error = "Cannot edit the film.";
+            return res.render('film/edit', film);
+        })
     },
     deleteGet: (req, res) => {
-        let id = req.params.id;
-
-        Film.findById(id).then(film => {
-            res.render('film/delete', film)
-        }).catch(err => {
-            res.redirect('/');
-        });
+        let filmId = req.params.id;
+        Film.findById(filmId).then(film => {
+            if (film) {
+                return res.render('film/delete', film);
+            } else {
+                return res.redirect('/');
+            }
+        }).catch(err => res.redirect('/'));
     },
     deletePost: (req, res) => {
-        let id = req.params.id;
-
-        Film.findByIdAndRemove(id).then(film => {
-            res.redirect('/')
-        }).catch(err => {
+        let filmId = req.params.id;
+        Film.findByIdAndRemove(filmId).then(film => {
             res.redirect('/');
-        });
+        }).catch(err => res.redirect('/'));
     }
 };
